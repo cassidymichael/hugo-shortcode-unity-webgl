@@ -1,0 +1,83 @@
+{{- $gameTitle := .Get "gameTitle" -}}
+{{- $width := .Get "width" -}}
+{{- $height := .Get "height" -}}
+{{- $buildURL := .Get "buildURL" -}}
+{{- $buildFileName := .Get "buildFileName" -}}
+{{- $playerID := .Get "playerID" -}}
+<div class="webgl-player">
+	<div id="{{ $playerID }}-unity-browser-width-warning" class="unity-browser-width-warning">
+		This content does not resize on smaller browser widths. Try using the fullscreen button below (after loading the game).
+	</div>
+	<div id="{{ $playerID }}-unity-mobile-warning" class="unity-mobile-warning">
+		Unity WebGL builds are not supported on mobile devices.
+	</div>
+	<div id="{{ $playerID }}-unity-container" class="unity-container unity-desktop" style="width: {{ $width }}px;">
+		<canvas id="{{ $playerID }}-unity-canvas" class="unity-canvas" width={{ $width }} height={{ $height }}></canvas>
+		<button id="{{ $playerID }}-unity-load-button" class="unity-load-button">start loading</button>
+		<div id="{{ $playerID }}-unity-loading-bar" class="unity-loading-bar">
+			<div id="{{ $playerID }}-unity-progress-bar-empty" class="unity-progress-bar-empty">
+				<div id="{{ $playerID }}-unity-progress-bar-full" class="unity-progress-bar-full"></div>
+			</div>
+		</div>
+		<div id="{{ $playerID }}-unity-footer" class="unity-footer">
+			<div id="{{ $playerID }}-unity-fullscreen-button" class="unity-fullscreen-button"></div>
+			<div id="{{ $playerID }}-unity-game-title" class="unity-game-title">{{ if $gameTitle }}{{ $gameTitle }}{{ end }}</div>
+		</div>
+		<script>
+			var buildUrl{{ $playerID | safeJS }} = {{ $buildURL }};
+			var loaderUrl{{ $playerID | safeJS }} = buildUrl{{ $playerID | safeJS }} + "/{{ $buildFileName }}.loader.js";
+			var config{{ $playerID | safeJS }} = {
+				dataUrl: buildUrl{{ $playerID | safeJS }} + "/{{ $buildFileName }}.data",
+				frameworkUrl: buildUrl{{ $playerID | safeJS }} + "/{{ $buildFileName }}.framework.js",
+				codeUrl: buildUrl{{ $playerID | safeJS }} + "/{{ $buildFileName }}.wasm",
+				streamingAssetsUrl: "StreamingAssets",
+			};
+
+			var container{{ $playerID | safeJS }} = document.querySelector("#{{ $playerID }}-unity-container");
+			var canvas{{ $playerID | safeJS }} = document.querySelector("#{{ $playerID }}-unity-canvas");
+			var loadButton{{ $playerID | safeJS }} = document.querySelector("#{{ $playerID }}-unity-load-button");
+			var loadingBar{{ $playerID | safeJS }} = document.querySelector("#{{ $playerID }}-unity-loading-bar");
+			var progressBarFull{{ $playerID | safeJS }} = document.querySelector("#{{ $playerID }}-unity-progress-bar-full");
+			var fullscreenButton{{ $playerID | safeJS }} = document.querySelector("#{{ $playerID }}-unity-fullscreen-button");
+			var mobileWarning{{ $playerID | safeJS }} = document.querySelector("#{{ $playerID }}-unity-mobile-warning");
+
+			// By default Unity keeps WebGL canvas render target size matched with
+			// the DOM size of the canvas element (scaled by window.devicePixelRatio)
+			// Set this to false if you want to decouple this synchronization from
+			// happening inside the engine, and you would instead like to size up
+			// the canvas DOM size and WebGL render target sizes yourself.
+			// config.matchWebGLToCanvasSize = false;
+
+			if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+				mobileWarning{{ $playerID | safeJS }}.style.display = "block";
+			} else {
+				mobileWarning{{ $playerID | safeJS }}.style.display = "none";
+			}
+			canvas{{ $playerID | safeJS }}.style.width = "{{ $width }}px";
+			canvas{{ $playerID | safeJS }}.style.height = "{{ $height }}px";
+			loadingBar{{ $playerID | safeJS }}.style.display = "none";
+
+			var script{{ $playerID | safeJS }} = document.createElement("script");
+			script{{ $playerID | safeJS }}.src = loaderUrl{{ $playerID | safeJS }};
+			loadButton{{ $playerID | safeJS }}.addEventListener("click", function () {
+				createUnityInstance(canvas{{ $playerID | safeJS }}, config{{ $playerID | safeJS }}, (progress) => {
+					progressBarFull{{ $playerID | safeJS }}.style.width = 100 * progress + "%";
+				}).then((unityInstance) => {
+					loadingBar{{ $playerID | safeJS }}.style.display = "none";
+					loadButton{{ $playerID | safeJS }}.style.display = "none";
+					loadButton{{ $playerID | safeJS }}.disabled = true;
+					fullscreenButton{{ $playerID | safeJS }}.onclick = () => {
+						unityInstance.SetFullscreen(1);
+					};
+				}).catch((message) => {
+					alert(message);
+				});
+			});
+			loadButton{{ $playerID | safeJS }}.addEventListener("click", function () {
+				loadButton{{ $playerID | safeJS }}.disabled = true;
+				loadingBar{{ $playerID | safeJS }}.style.display = "block";
+			});
+			document.body.appendChild(script{{ $playerID | safeJS }});
+		</script>
+	</div>
+</div>

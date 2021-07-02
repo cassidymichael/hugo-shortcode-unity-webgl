@@ -1,0 +1,125 @@
+.webgl-player {
+    margin: 30px auto;
+}
+.unity-container {
+    position: relative;
+    margin: 0 auto;
+    background: #eee;
+    padding: 15px;
+}
+.unity-canvas {
+    background: #231f20;
+}
+.unity-loading-bar {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+.unity-progress-bar-empty {
+    width: 141px;
+    height: 18px;
+    margin-top: 10px;
+    background: url('../img/progress-bar-empty-dark.png') no-repeat center;
+    /* change path as needed */ 
+}
+.unity-progress-bar-full {
+    width: 0%;
+    height: 18px;
+    margin-top: 10px;
+    background: url('../img/progress-bar-full-dark.png') no-repeat center;
+    /* change path as needed */ 
+}
+.unity-fullscreen-button {
+    width: 38px;
+    height: 38px;
+    background: url('../img/fullscreen-button.png') no-repeat center;
+    /* change path as needed */ 
+}
+.unity-footer {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.unity-game-title {
+    font-weight: 600;
+    font-size: 1.5em;
+    line-height: 1.2;
+}
+.unity-build-title {
+    float: right;
+    margin-right: 10px;
+    line-height: 38px;
+    font-family: arial;
+    font-size: 18px;
+}
+.unity-mobile-warning {
+    padding: 10px;
+    margin: 0 auto;
+    display: none;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+}
+.unity-browser-width-warning {
+    padding: 10px;
+    margin: 0 auto;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+    display: none;
+}
+@media (max-width: 1050px) {
+    .unity-browser-width-warning {
+        display: block;
+   }
+}
+.unity-load-button {
+    display: inline-block;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    height: 40px;
+    padding: 0 20px;
+    width: auto;
+    background: white;
+    overflow: visible;
+    appearance: none;
+    transition: all 0.1s ease-out;
+    font-size: 14px;
+    font-weight: 600;
+    color: inherit;
+    line-height: 40px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 2px 4px rgba(189, 189, 189, 0.5);
+}
+.unity-load-button:focus {
+    outline: none;
+}
+.unity-load-button:focus, .unity-load-button:hover {
+    opacity: 0.85;
+    cursor: pointer;
+    transform: translate(-50%, -50%) scale(1.025);
+    box-shadow: 0 2px 8px rgba(189, 189, 189, 0.5);
+}
+.unity-load-button:active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+.unity-load-button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+    transform: translate(-50%, -50%) scale(0.9);
+    box-shadow: 0 2px 4px rgba(189, 189, 189, 0.5);
+    opacity: 0.85;
+}
